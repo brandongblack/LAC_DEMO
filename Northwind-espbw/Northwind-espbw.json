@@ -1,0 +1,595 @@
+[
+  {
+    "ident": 2316,
+    "ts": "2016-08-23T23:28:57.682",
+    "exportVersion": "v4",
+    "adminSchemaVersion": "20160323",
+    "name": "Northwind-espbw",
+    "url_name": "espbw",
+    "comments": "Simple order processing demo",
+    "status": null,
+    "is_active": true,
+    "account_ident": 1000,
+    "authprovider_ident": 1000,
+    "@metadata": {
+      "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport/2316",
+      "checksum": "A:943e8ba750060770",
+      "nonpersistent": [
+        "exportVersion",
+        "adminSchemaVersion"
+      ]
+    },
+    "Topics": [],
+    "Rules": [
+      {
+        "ident": 2424,
+        "ts": "2016-08-23T23:28:59.004",
+        "entity_name": "nw:Customers",
+        "attribute_name": "Balance",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "OrdersList",
+        "rule_text2": "null === ShippedDate",
+        "rule_text3": "AmountTotal",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": "adjust the balance to be the sum(OrdersList.AmountTotal) for unshipped orders",
+        "auto_name": "Derive Balance as sum(OrdersList.AmountTotal where null === ShippedDate)",
+        "verbs": null,
+        "comments": "Adjusts Balance by *reacting* to changes in OrdersList.AmountTotal,\nincluding other changes noted in Table/Column help.",
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2316,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Rules/2424",
+          "checksum": "A:28dcebe86c6a61e1"
+        },
+        "RuleTopics": []
+      },
+      {
+        "ident": 2423,
+        "ts": "2016-08-23T23:28:58.995",
+        "entity_name": "nw:Customers",
+        "attribute_name": null,
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "return row.Balance <= row.CreditLimit;",
+        "rule_text2": "Transaction cannot be completed - Balance ({Balance|#,##0.00}) exceeds Credit Limit ({CreditLimit|#,##0.00})",
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": "",
+        "auto_name": "Validation return row.Balance <= row.CreditLimit;",
+        "verbs": null,
+        "comments": "Observe Error message insertion points {}",
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2316,
+        "ruletype_ident": 5,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Rules/2423",
+          "checksum": "A:28dcebe86c6a61e1"
+        },
+        "RuleTopics": []
+      },
+      {
+        "ident": 2425,
+        "ts": "2016-08-23T23:28:59.006",
+        "entity_name": "nw:Order Details",
+        "attribute_name": "Amount",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": "javascript",
+        "prop5": null,
+        "rule_text1": "var amount = row.Quantity * row.UnitPrice;  // row is the OrderDetails row\nif (row.Quantity !== 0) {\n    amount = amount * (100 - 100*row.Discount) / 100;\n}\nreturn amount;\n",
+        "rule_text2": null,
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": "Amount as Quantity * UnitPrice -- (JavaScript snippet)",
+        "auto_name": "Derive Amount as var amount = row.Quantity * row.UnitPrice;  // row is the OrderDetails row\nif (row.Quantity !== 0) {\n    amount = amount * (100 - ...",
+        "verbs": null,
+        "comments": "JavaScript is used to express logic,\nproviding access to libraries for date arithmetic (etc.), or your own.\nReactive logic recomputes Amount in response to changes Quantity, Price (and, per logic chaining, the ProductId)",
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2316,
+        "ruletype_ident": 3,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Rules/2425",
+          "checksum": "A:28dcebe86c6a61e1"
+        },
+        "RuleTopics": []
+      },
+      {
+        "ident": 2426,
+        "ts": "2016-08-23T23:28:59.007",
+        "entity_name": "nw:Order Details",
+        "attribute_name": "UnitPrice",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "FK_Order_Details_Products",
+        "rule_text2": "UnitPrice",
+        "rule_text3": null,
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": "copy price from product, unaffected by price changes",
+        "auto_name": "Derive UnitPrice as parentcopy(FK_Order_Details_Products.UnitPrice)",
+        "verbs": null,
+        "comments": "Obtain the price from the product.\nCopy means subsequent changes to Products.UnitPrice do not affect existing Order Details.\n  You could also use a formula for row.Products.UnitPrice if you *do* want to cascade changes.\n\nYou can change the Rule name (at the top) to be more friendly, or specify a more suitable Foreign Key name, such as Product__OrderDetails.",
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2316,
+        "ruletype_ident": 4,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Rules/2426",
+          "checksum": "A:28dcebe86c6a61e1"
+        },
+        "RuleTopics": []
+      },
+      {
+        "ident": 2427,
+        "ts": "2016-08-23T23:28:59.009",
+        "entity_name": "nw:Orders",
+        "attribute_name": "AmountTotal",
+        "prop1": null,
+        "prop2": null,
+        "prop3": null,
+        "prop4": null,
+        "prop5": null,
+        "rule_text1": "Order_DetailsList",
+        "rule_text2": null,
+        "rule_text3": "Amount",
+        "rule_text4": null,
+        "rule_text5": null,
+        "predicate": null,
+        "name": "",
+        "auto_name": "Derive AmountTotal as sum(Order_DetailsList.Amount)",
+        "verbs": null,
+        "comments": "Adjust the AmountTotal to be the sum(Order_DetailsList.Amount)\nObserve how simple rules chain to solve complex, multi-table transactions.",
+        "active": true,
+        "sqlable": false,
+        "project_ident": 2316,
+        "ruletype_ident": 1,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Rules/2427",
+          "checksum": "A:28dcebe86c6a61e1"
+        },
+        "RuleTopics": []
+      }
+    ],
+    "ApiVersions": [
+      {
+        "ident": 2316,
+        "ts": "2016-08-23T23:28:57.754",
+        "name": "v1",
+        "comments": null,
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiVersions/2316",
+          "checksum": "A:065ffb6cfab3e4dd"
+        },
+        "Resources": [
+          {
+            "ident": 2528,
+            "ts": "2016-08-23T23:28:59.026",
+            "resource_type_ident": 1,
+            "prefix": "nw",
+            "table_name": "Customers",
+            "name": "CustomersBusObject",
+            "description": "Customers with orders - note Attribute alias",
+            "is_collection": "Y",
+            "join_condition": null,
+            "filter": null,
+            "sorting": "\"CompanyName\" asc",
+            "attach_path": null,
+            "caching": null,
+            "custom_class": null,
+            "code_text": null,
+            "filter_code": null,
+            "serial_filter": null,
+            "prop1": null,
+            "prop2": null,
+            "prop3": null,
+            "prop4": null,
+            "prop5": null,
+            "container_ident": null,
+            "sibling_rank": 100,
+            "combined": false,
+            "root_ident": null,
+            "linked_ident": null,
+            "apiversion_ident": 2316,
+            "@metadata": {
+              "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources/2528",
+              "checksum": "A:bc2b69ab7ffd98ef"
+            },
+            "ResourceAttributes": [
+              {
+                "ident": 2903,
+                "ts": "2016-08-23T23:28:59.037",
+                "name": "ID",
+                "description": null,
+                "column_name": "CustomerID",
+                "format": null,
+                "formula": null,
+                "is_defined_key_part": false,
+                "resource_ident": 2528,
+                "code_type": null,
+                "@metadata": {
+                  "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources.ResourceAttributes/2903",
+                  "checksum": "A:e2f86b3c8bde1c18"
+                }
+              },
+              {
+                "ident": 2904,
+                "ts": "2016-08-23T23:28:59.043",
+                "name": "Balance",
+                "description": null,
+                "column_name": "Balance",
+                "format": null,
+                "formula": null,
+                "is_defined_key_part": false,
+                "resource_ident": 2528,
+                "code_type": null,
+                "@metadata": {
+                  "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources.ResourceAttributes/2904",
+                  "checksum": "A:e2f86b3c8bde1c18"
+                }
+              }
+            ]
+          },
+          {
+            "ident": 2529,
+            "ts": "2016-08-23T23:28:59.045",
+            "resource_type_ident": 1,
+            "prefix": "nw",
+            "table_name": "Orders",
+            "name": "Orders",
+            "description": "Orders for customer",
+            "is_collection": "Y",
+            "join_condition": "\"CustomerID\" = [CustomerID]",
+            "filter": null,
+            "sorting": "\"OrderDate\" asc",
+            "attach_path": null,
+            "caching": null,
+            "custom_class": null,
+            "code_text": null,
+            "filter_code": null,
+            "serial_filter": null,
+            "prop1": null,
+            "prop2": null,
+            "prop3": null,
+            "prop4": null,
+            "prop5": null,
+            "container_ident": 2528,
+            "sibling_rank": 100,
+            "combined": false,
+            "root_ident": 2528,
+            "linked_ident": null,
+            "apiversion_ident": 2316,
+            "@metadata": {
+              "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources/2529",
+              "checksum": "A:bc2b69ab7ffd98ef"
+            },
+            "ResourceAttributes": [
+              {
+                "ident": 2905,
+                "ts": "2016-08-23T23:28:59.047",
+                "name": "Total",
+                "description": null,
+                "column_name": "AmountTotal",
+                "format": null,
+                "formula": null,
+                "is_defined_key_part": false,
+                "resource_ident": 2529,
+                "code_type": null,
+                "@metadata": {
+                  "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources.ResourceAttributes/2905",
+                  "checksum": "A:e2f86b3c8bde1c18"
+                }
+              },
+              {
+                "ident": 2906,
+                "ts": "2016-08-23T23:28:59.048",
+                "name": "Date",
+                "description": null,
+                "column_name": "OrderDate",
+                "format": null,
+                "formula": null,
+                "is_defined_key_part": false,
+                "resource_ident": 2529,
+                "code_type": null,
+                "@metadata": {
+                  "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiVersions.Resources.ResourceAttributes/2906",
+                  "checksum": "A:e2f86b3c8bde1c18"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "DbaseSchemas": [
+      {
+        "ident": 2318,
+        "name": "Database: Derby - Northwind",
+        "comments": "Created using Connect Wizard",
+        "url": "jdbc:derby:Northwind",
+        "catalog_name": null,
+        "schema_name": null,
+        "user_name": "Northwind",
+        "password": null,
+        "salt": null,
+        "active": true,
+        "status": null,
+        "dbasetype_ident": 17,
+        "prefix": "nw",
+        "datasource_name": null,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.DbaseSchemas/2318",
+          "checksum": "A:1c223b0aa5b38cdb"
+        },
+        "TableInfos": [],
+        "NonPersistentAttributes": []
+      }
+    ],
+    "ProjectLibraries": [],
+    "ProjectOptions": [
+      {
+        "ident": 2742,
+        "ts": "2016-08-23T23:28:57.916",
+        "option_value": "{{globals.docSiteRoot}}/tutorial/northwind",
+        "project_ident": 2316,
+        "projectoptiontype_ident": 13,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ProjectOptions/2742",
+          "checksum": "A:97973b7d2e6c998a"
+        }
+      }
+    ],
+    "ApiKeys": [
+      {
+        "ident": 2402,
+        "ts": "2016-08-23T23:28:57.691",
+        "name": "Admin key",
+        "description": "Created as part of this API. Feel free to change or delete this auth token.",
+        "apikey": "JoKTCcdlsZSjiCbh6Dxk",
+        "status": "A",
+        "expiration": null,
+        "logging": "*=FINE",
+        "user_identifier": null,
+        "data": null,
+        "origin": null,
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiKeys/2402",
+          "checksum": "A:ec95130b1e77f714"
+        }
+      },
+      {
+        "ident": 2403,
+        "ts": "2016-08-23T23:28:59.011",
+        "name": "Region Customers",
+        "description": "Use this key in the REST Lab, and observe that Customers returns fewer rows.\n\nThis is due to the defined Role, which uses the Global variable defined on the Details tab.",
+        "apikey": "RegCusts",
+        "status": "A",
+        "expiration": null,
+        "logging": "*=FINE",
+        "user_identifier": null,
+        "data": "UserRegion=OR",
+        "origin": null,
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.ApiKeys/2403",
+          "checksum": "A:ec95130b1e77f714"
+        }
+      }
+    ],
+    "Roles": [
+      {
+        "ident": 2356,
+        "ts": "2016-08-23T23:28:57.711",
+        "name": "API Documentation",
+        "description": "This role is special and is used when generating OpenAPI(Swagger) documentation. It is recognized by the name special name 'API Documentation' and used only for documentation calls.\n Any Resources, Tables, Views, Procedures etc. that are defined and enabled by this role are used to generate the OpenAPI(Swagger) documentation.\n If this role is assigned to a user it will NOT be used for execution permissions.\n If this role is removed or otherwise unavailable, the Swagger/OpenAPI documentation will be nothing more that a name and version.",
+        "default_permission": "A",
+        "default_apivisibility": "TVPRM",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Roles/2356",
+          "checksum": "A:91546806d3464c66"
+        },
+        "TablePermissions": [],
+        "PermissionData": [],
+        "ApiKeyRoles": [],
+        "ApiVisibility": []
+      },
+      {
+        "ident": 2359,
+        "ts": "2016-08-23T23:28:59.116",
+        "name": "Authorized per region",
+        "description": "Click the Permissions tab.",
+        "default_permission": "A",
+        "default_apivisibility": "TVRPM",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Roles/2359",
+          "checksum": "A:91546806d3464c66"
+        },
+        "TablePermissions": [
+          {
+            "ident": 2336,
+            "ts": "2016-08-23T23:28:59.121",
+            "name": "My Regions Customer",
+            "description": "Illustrates row-level security - see only customers in 'my' UserRegion.\n\nUserRegion defined in the Auth Tokens (for this example), or Users (in normal cases)",
+            "entity_name": "nw:Customers",
+            "column_names": null,
+            "predicate": "\"Region\" = '@{UserRegion}'",
+            "access_type": "A",
+            "role_ident": 2359,
+            "@metadata": {
+              "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Roles.TablePermissions/2336",
+              "checksum": "A:b8fa0140621f355c"
+            }
+          }
+        ],
+        "PermissionData": [],
+        "ApiKeyRoles": [
+          {
+            "ident": 2404,
+            "ts": "2016-08-23T23:28:59.118",
+            "apikey_ident": 2403,
+            "role_ident": 2359,
+            "@metadata": {
+              "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Roles.ApiKeyRoles/2404",
+              "checksum": "A:05b662428c6f2116"
+            }
+          }
+        ],
+        "ApiVisibility": []
+      },
+      {
+        "ident": 2357,
+        "ts": "2016-08-23T23:28:57.722",
+        "name": "Full access",
+        "description": "Full access to everything in this project",
+        "default_permission": "A",
+        "default_apivisibility": "TVPRM",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Roles/2357",
+          "checksum": "A:91546806d3464c66"
+        },
+        "TablePermissions": [],
+        "PermissionData": [],
+        "ApiKeyRoles": [
+          {
+            "ident": 2403,
+            "ts": "2016-08-23T23:28:57.729",
+            "apikey_ident": 2402,
+            "role_ident": 2357,
+            "@metadata": {
+              "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Roles.ApiKeyRoles/2403",
+              "checksum": "A:05b662428c6f2116"
+            }
+          }
+        ],
+        "ApiVisibility": []
+      },
+      {
+        "ident": 2358,
+        "ts": "2016-08-23T23:28:57.726",
+        "name": "Read only",
+        "description": "Read-only access to everything in this project",
+        "default_permission": "R",
+        "default_apivisibility": "TVPRM",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Roles/2358",
+          "checksum": "A:91546806d3464c66"
+        },
+        "TablePermissions": [],
+        "PermissionData": [],
+        "ApiKeyRoles": [],
+        "ApiVisibility": []
+      }
+    ],
+    "Users": [
+      {
+        "ident": 2343,
+        "ts": "2016-08-23T23:28:57.742",
+        "name": "admin",
+        "fullname": "Admin Account with full access",
+        "email": null,
+        "status": "A",
+        "roles": "Full access",
+        "data": null,
+        "comments": null,
+        "apikey_lifespan": null,
+        "password_hash": "3Zl+PuO2vDrrFsxPARFEgxdPZyP3f0OiNdUpMcL2Ie1ioYl0cCkUJBM6XWHPbcOiYjRew3Vlu+bYtbdcqdIGkQ==",
+        "password_salt": "/i9TzdCch/+QC/CbxgzVeHP5LqJH8T2gPNJ7jDO2",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Users/2343",
+          "checksum": "A:df7b270477eabf8d"
+        }
+      },
+      {
+        "ident": 2342,
+        "ts": "2016-08-23T23:28:57.734",
+        "name": "demo",
+        "fullname": "Demo Account with full access",
+        "email": null,
+        "status": "A",
+        "roles": "Full access",
+        "data": null,
+        "comments": null,
+        "apikey_lifespan": null,
+        "password_hash": "Gbs1PPaleeQXYiwhrpH6O5mS0lv6beoVZBzl0irbyF/Cs2LpiFbAb9c/5ANomLxE68yG7kxnZ8hBBY7rabR9ag==",
+        "password_salt": "si+tkMjV8QrvJ77+z6ObUQPNEuUmlE+8+29Am2WM",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Users/2342",
+          "checksum": "A:df7b270477eabf8d"
+        }
+      },
+      {
+        "ident": 2344,
+        "ts": "2016-08-23T23:28:57.747",
+        "name": "guest",
+        "fullname": "Guest Account with read-only access",
+        "email": null,
+        "status": "A",
+        "roles": "Read only",
+        "data": null,
+        "comments": null,
+        "apikey_lifespan": null,
+        "password_hash": "lyqfjceqQpOlHSm6Vsa16ap1t7kkDqnj0WmMUb3HnOcLOzDtdjZe8xMwGrDmwNSgPG3pbhNFKTWdaAGV+U/LIg==",
+        "password_salt": "gHbUYRpK73MbhqslinMNUnqd5DTLCHNuqg336Wzu",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Users/2344",
+          "checksum": "A:df7b270477eabf8d"
+        }
+      },
+      {
+        "ident": 2345,
+        "ts": "2016-08-23T23:28:59.013",
+        "name": "region",
+        "fullname": "User with specified region",
+        "email": null,
+        "status": "A",
+        "roles": "Authorized per region",
+        "data": "UserRegion=OR",
+        "comments": null,
+        "apikey_lifespan": null,
+        "password_hash": "ymw8M9MOrz2jwjZGiu8T7IUOv5NAtxthu/CNUWRWltELTgbGY1bJ/MWdjrzIrkUpHlXMP+qmBJc84q1BtoTzpg==",
+        "password_salt": "zXFH3Uwdim9r3YGzl8NhnQa1CUdgkLx5/fT98w6u",
+        "project_ident": 2316,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/ProjectExport.Users/2345",
+          "checksum": "A:df7b270477eabf8d"
+        }
+      }
+    ],
+    "Handlers": [],
+    "EventHandlers": [],
+    "Relationships": [],
+    "Applications": [],
+    "NamedFilters": [],
+    "NamedSorts": []
+  }
+]

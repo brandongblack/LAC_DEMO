@@ -1,0 +1,118 @@
+[
+  {
+    "ident": 2528,
+    "resource_type_ident": 1,
+    "entity_name": "nw:Customers",
+    "prefix": "nw",
+    "table_name": "Customers",
+    "name": "CustomersBusObject",
+    "description": "Customers with orders - note Attribute alias",
+    "is_collection": "Y",
+    "join_condition": null,
+    "filter": null,
+    "sorting": "\"CompanyName\" asc",
+    "caching": null,
+    "custom_class": null,
+    "code_text": null,
+    "filter_code": null,
+    "prop1": null,
+    "prop2": null,
+    "prop3": null,
+    "prop4": null,
+    "prop5": null,
+    "attach_path": null,
+    "container_ident": null,
+    "root_ident": null,
+    "linked_ident": null,
+    "sibling_rank": 100,
+    "combined": false,
+    "Attributes": [
+      {
+        "ident": 2904,
+        "name": "Balance",
+        "description": null,
+        "column_name": "Balance",
+        "format": null,
+        "formula": null,
+        "resource_ident": 2528,
+        "is_defined_key_part": false,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/AllResources.Attributes/2904",
+          "checksum": "A:e2f86b3c8bde1c18"
+        }
+      },
+      {
+        "ident": 2903,
+        "name": "ID",
+        "description": null,
+        "column_name": "CustomerID",
+        "format": null,
+        "formula": null,
+        "resource_ident": 2528,
+        "is_defined_key_part": false,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/AllResources.Attributes/2903",
+          "checksum": "A:e2f86b3c8bde1c18"
+        }
+      }
+    ]
+  },
+  {
+    "ident": 2529,
+    "resource_type_ident": 1,
+    "entity_name": "nw:Orders",
+    "prefix": "nw",
+    "table_name": "Orders",
+    "name": "Orders",
+    "description": "Orders for customer",
+    "is_collection": "Y",
+    "join_condition": "\"CustomerID\" = [CustomerID]",
+    "filter": null,
+    "sorting": "\"OrderDate\" asc",
+    "caching": null,
+    "custom_class": null,
+    "code_text": null,
+    "filter_code": null,
+    "prop1": null,
+    "prop2": null,
+    "prop3": null,
+    "prop4": null,
+    "prop5": null,
+    "attach_path": null,
+    "container_ident": 2528,
+    "root_ident": 2528,
+    "linked_ident": null,
+    "sibling_rank": 100,
+    "combined": false,
+    "Attributes": [
+      {
+        "ident": 2906,
+        "name": "Date",
+        "description": null,
+        "column_name": "OrderDate",
+        "format": null,
+        "formula": null,
+        "resource_ident": 2529,
+        "is_defined_key_part": false,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/AllResources.Attributes/2906",
+          "checksum": "A:e2f86b3c8bde1c18"
+        }
+      },
+      {
+        "ident": 2905,
+        "name": "Total",
+        "description": null,
+        "column_name": "AmountTotal",
+        "format": null,
+        "formula": null,
+        "resource_ident": 2529,
+        "is_defined_key_part": false,
+        "@metadata": {
+          "href": "http://apimlac.virtualpresales.lab:8080/rest/abl/admin/v2/AllResources.Attributes/2905",
+          "checksum": "A:e2f86b3c8bde1c18"
+        }
+      }
+    ]
+  }
+]

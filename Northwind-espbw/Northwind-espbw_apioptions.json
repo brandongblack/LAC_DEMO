@@ -1,0 +1,17 @@
+[
+  {
+    "ts": "2016-08-23T23:28:57.916",
+    "option_value": "{{globals.docSiteRoot}}/tutorial/northwind",
+    "projectoptiontype_ident": 13,
+    "ProjectOptionTypes": {
+      "ident": 13,
+      "ts": "2016-06-24T04:04:06.608",
+      "name": "Tech docs URL",
+      "data_type": "string",
+      "description": "An optional URL to technical documentation for this project.",
+      "default_value": null,
+      "valid_values": null,
+      "system_only": false
+    }
+  }
+]
